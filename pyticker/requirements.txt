@@ -1,0 +1,6 @@
+cursor
+schedule
+bashplotlib
+requests
+termcolor
+ujson
