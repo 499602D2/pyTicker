@@ -5,6 +5,8 @@
 3. `pip3 install -r requirements.txt`
 4. `python3 pyticker.py`
 
+After the first run, ticker can be added by modifying the `pyticker-config.json` file. Tickers should match those found on the Yahoo Finance website.
+
 ![preview](preview.png)
 
 ## Issues
