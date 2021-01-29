@@ -5,6 +5,8 @@
 3. `pip3 install -r requirements.txt`
 4. `python3 pyticker.py`
 
+![preview](preview.png)
+
 ## Issues
 If your cursor disappears in the terminal:
 
