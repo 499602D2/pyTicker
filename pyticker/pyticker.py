@@ -108,23 +108,28 @@ def print_tickers(tickers):
 		except:
 			ps = '='
 
-		if mstate not in ('PREPRE', 'POSTPOST', 'CLOSED'):
-			if data_dict[symbol][-1] >= price:
-				d = colored('↓', 'red', attrs=['blink'])
-			elif data_dict[symbol][-1] < price:
-				d = colored('↑', 'green', attrs=['blink'])
-
-			if pchange >= 0:
-				color = 'green'
-			elif pchange < 0:
-				color = 'red'
-		else:
+		if mstate in ('PREPRE', 'POSTPOST', 'CLOSED'):
 			if pchange < 0:
 				color = 'red'
 				d = colored('↓', 'red', attrs=['dark'])
 			else:
 				color = 'green'
 				d = colored('↑', 'green', attrs=['dark'])
+		else:
+			# next_empty - 1
+			idx = next_empty - 1 if next_empty - 1 >= 0 else 0
+
+			if data_dict[symbol][idx] >= price:
+				d = colored('↓', 'red', attrs=['blink'])
+			elif data_dict[symbol][idx] < price:
+				d = colored('↑', 'green', attrs=['blink'])
+			else:
+				d = colored('↑', 'green', attrs=['blink'])
+
+			if pchange >= 0:
+				color = 'green'
+			elif pchange < 0:
+				color = 'red'
 
 		# store price in next free index
 		data_dict[symbol][next_empty] = price
@@ -139,27 +144,27 @@ def print_tickers(tickers):
 		}[mstate]
 
 		# format pchange
-		pchange = f'{ps}{pchange:.2f}'
+		pchange = f'{ps}{pchange:.2f}%'
 
 		if len(mstate) > mstatemaxlen:
 			mstatemaxlen = len(mstate)
 
 		if len(pchange) > pchmaxlen:
-			pchmaxlen = len(pchange)
+			pchmaxlen = len(str(pchange)) + 1
 
 		# color individual parts
 		if mstate != '[CLOSED]':
 			symstr =  colored(f'{symbol:>{tmaxlen}} ', color, attrs=['bold'])
-			pricestr = colored(f'{price:>{pmaxlen+1}.4f} {pchange:>{pchmaxlen+1}}%  {mstate}', color)
+			pricestr = colored(f'{price:>{pmaxlen}.4f}  {pchange:>{pchmaxlen}}  {mstate}', color)
 		else:
 			symstr =  colored(f'{symbol:>{tmaxlen}} ', color, attrs=['bold', 'dark'])
-			pricestr = colored(f'{price:>{pmaxlen+1}.4f} {pchange:>{pchmaxlen+1}}%  {mstate}', color, attrs=['dark'])
+			pricestr = colored(f'{price:>{pmaxlen}.4f}  {pchange:>{pchmaxlen}}  {mstate}', color, attrs=['dark'])
 
 		printstr += f'{symstr} {d} {pricestr}\n'
 
 	# add header
-	symstr = colored(f'{"TICKER":>{tmaxlen}}  𝜹 ') # attrs=['dark']
-	pricestr = colored(f'{"PRICE":>{pmaxlen+1-1}} {"CHANGE":>{pchmaxlen+2}}  {"MARKET":{mstatemaxlen}}')
+	symstr = colored(f'{"TICKER":>{tmaxlen}}  𝜹 ')
+	pricestr = colored(f'{"PRICE":>{pmaxlen}} {"DAY":>{pchmaxlen}}  {"MARKET":<{mstatemaxlen}}')
 	printstr = f'\n{symstr} {pricestr}\n' + printstr
 
 	# write to console
@@ -222,7 +227,7 @@ if __name__ == '__main__':
 	- add trailing 5, 15, 1 hour delta (% + arrow)
 		- replace "CHANGE" with "DAY" -> add "5", "15", "60"
 	'''
-	VERSION = '0.1.1'
+	VERSION = '0.1.2'
 	logging.basicConfig(
 		filename='pyticker-log.log', level=logging.DEBUG,
 		format='%(asctime)s %(message)s',
