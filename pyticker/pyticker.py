@@ -120,11 +120,11 @@ def print_tickers(tickers):
 			idx = next_empty - 1 if next_empty - 1 >= 0 else 0
 
 			if data_dict[symbol][idx] >= price:
-				d = colored('↓', 'red', attrs=['blink'])
+				d = colored('↓', 'red')
 			elif data_dict[symbol][idx] < price:
-				d = colored('↑', 'green', attrs=['blink'])
+				d = colored('↑', 'green')
 			else:
-				d = colored('↑', 'green', attrs=['blink'])
+				d = colored('↑', 'green')
 
 			if pchange >= 0:
 				color = 'green'
