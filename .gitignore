@@ -1,2 +1,4 @@
 pyticker/.DS_Store
 .DS_Store
+pyticker/pyticker-config.json
+pyticker/pyticker-log.log
